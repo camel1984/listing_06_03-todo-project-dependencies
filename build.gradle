@@ -1,0 +1,49 @@
+plugins {
+    id "org.gretty" version "2.2.0" apply false
+}
+
+ext.projectIds = ['group': 'com.manning.gia', 'version': '0.1']
+
+group = projectIds.group
+version = projectIds.version
+
+project(':model') {
+    group = projectIds.group
+    version = projectIds.version
+    apply plugin: 'java'
+}
+
+project(':repository') {
+    group = projectIds.group
+    version = projectIds.version
+    apply plugin: 'java'
+
+    dependencies {
+        compile project(':model')
+    }
+}
+
+
+project(':web') {
+    group = projectIds.group
+    version = projectIds.version
+
+    apply plugin: 'war'
+    apply plugin: 'org.gretty'
+
+    repositories {
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+
+        maven {
+            url "https://repo.spring.io/plugins-release/"
+        }
+    }
+
+    dependencies {
+        compile project(':repository')
+        providedCompile 'javax.servlet:servlet-api:2.5'
+        runtime 'javax.servlet:jstl:1.1.2'
+    }
+}
